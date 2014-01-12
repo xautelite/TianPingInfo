@@ -1,0 +1,120 @@
+﻿@model TianPingInformation.Models.POCO.Student
+
+@{
+    ViewBag.Title = "新建—天平驾校学员信息管理系统";
+}
+
+<h2>Create</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Student</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Identity)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Identity)
+            @Html.ValidationMessageFor(model => model.Identity)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Address)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Address)
+            @Html.ValidationMessageFor(model => model.Address)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EnrollmentDate)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnrollmentDate, new { @class="datetime"})
+            @Html.ValidationMessageFor(model => model.EnrollmentDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Phone)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Phone)
+            @Html.ValidationMessageFor(model => model.Phone)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Photo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Photo)
+            @Html.ValidationMessageFor(model => model.Photo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Exam1)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Exam1, new { @class="datetime"})
+            @Html.ValidationMessageFor(model => model.Exam1)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Exam2)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Exam2, new { @class = "datetime" })
+            @Html.ValidationMessageFor(model => model.Exam2)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Exam3)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Exam3, new { @class = "datetime" })
+            @Html.ValidationMessageFor(model => model.Exam3)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Exam4)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Exam4, new { @class = "datetime" })
+            @Html.ValidationMessageFor(model => model.Exam4)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IssueDate)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.IssueDate, new { @class = "datetime" })
+            @Html.ValidationMessageFor(model => model.IssueDate)
+        </div>
+
+        <p>
+            <input type="submit" value="保存"  class="btn btn-primary"/>
+            @Html.ActionLink("返回", "Index", "Student", null, new { @class = "btn btn-primary" })
+        </p>
+    </fieldset>
+}
+
+<script type="text/javascript">
+    $(".datetime").datetimepicker({
+        language: "zh-CN",
+        format: 'yyyy-mm-dd',
+        minView: 2,
+        autoclose: true,               // 选择日期后自动关闭
+        todayHighlight: true           // 高亮当前日期
+    });
+</script> 

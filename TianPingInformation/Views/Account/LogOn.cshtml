@@ -1,0 +1,34 @@
+﻿@model TianPingInformation.Models.LogOnModel
+@{
+    ViewBag.Title = "登陆—天平驾校学员信息管理系统";
+}
+<link href="@Url.Content("~/Content/Login.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<div class="container">
+    @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+    { 
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            @Html.ValidationSummary(true, "登陆失败，请重试.")
+        </div>
+    }
+    @using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { @class = "form-signin" }))
+    { 
+        <fieldset>
+            <h2 class="form-signin-heading" style=" text-align:center">
+                系统登陆</h2>
+            @Html.LabelFor(m => m.UserName)
+            @Html.TextBoxFor(m => m.UserName, new { @class = "input-block-level" })
+            @Html.ValidationMessageFor(m => m.UserName)
+            @Html.LabelFor(m => m.Password)
+            @Html.PasswordFor(m => m.Password, new { @class = "input-block-level" })
+            @Html.ValidationMessageFor(m => m.Password)
+            <label class="checkbox">
+                @Html.CheckBoxFor(m => m.RememberMe) 记住密码？
+                @*@Html.LabelFor(m => m.RememberMe)*@
+            </label>
+            <button class="btn btn-large btn-primary" type="submit">登 陆</button>
+        </fieldset>
+    }
+</div>

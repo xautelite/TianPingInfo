@@ -1,0 +1,68 @@
+﻿@model TianPingInformation.Models.POCO.Student
+
+@{
+    ViewBag.Title = "学员详细信息—天平驾校学员信息管理系统";
+}
+
+<fieldset>
+    <legend>Student</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Identity</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Identity)
+    </div>
+
+    <div class="display-label">Address</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Address)
+    </div>
+
+    <div class="display-label">EnrollmentDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.EnrollmentDate)
+    </div>
+
+    <div class="display-label">Phone</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Phone)
+    </div>
+
+    <div class="display-label">Photo</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Photo)
+    </div>
+
+    <div class="display-label">Exam1</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Exam1)
+    </div>
+
+    <div class="display-label">Exam2</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Exam2)
+    </div>
+
+    <div class="display-label">Exam3</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Exam3)
+    </div>
+
+    <div class="display-label">Exam4</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Exam4)
+    </div>
+
+    <div class="display-label">IssueDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IssueDate)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

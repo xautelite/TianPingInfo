@@ -1,0 +1,54 @@
+﻿@using MvcPaging
+@model List<TianPingInformation.Models.POCO.Student>
+@{
+    ViewBag.Title = "AjaxIndex";
+}
+
+<div class="clearfix">
+</div>
+@using (Ajax.BeginForm("AjaxIndex", "Student", 
+                        new AjaxOptions { UpdateTargetId = "grid-list", HttpMethod = "get", LoadingElementId = "loading", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" },
+                        new { id = "frm-search" }))
+{ 
+    <div class="input-append">
+        <input id="student_name" class="span2" name="student_name" type="text" placeholder="学员姓名" />
+        <input id="id_number" class="span2" name="id_number" type="text" placeholder="身份证号" />
+        <input id="start_date" class="span2 datetime" name="start_date" type="text" placeholder="起始日期" />至
+        <input id="end_date" class="span2 datetime" name="end_date" type="text" placeholder="结束日期" />
+        <button class="btn" type="submit">
+            <i class="icon-search"></i>搜索</button>
+        @*@Html.ActionLink("新建", "Create", "Student", null, new { @class = "btn btn-primary pull-right" })*@
+        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editModal" onclick="create()">
+                        新建</button>
+    </div>
+    <div id="grid-list">
+        @{ Html.RenderPartial("_AjaxStudentList", Model); }
+    </div>
+}
+
+<script type="text/javascript">
+
+    function beginPaging(args) {
+        // Animate
+        $('#grid-list').fadeOut('normal');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#grid-list').fadeIn('normal');
+        $('a').tooltip();
+    }
+
+    function failurePaging() {
+        alert("获取数据失败.");
+    }
+
+    $(".datetime").datetimepicker({
+        language: "zh-CN",
+        format: 'yyyy-mm-dd',
+        minView: 2,
+        autoclose: true,               // 选择日期后自动关闭
+        todayHighlight: true           // 高亮当前日期
+    });
+
+</script>

@@ -1,0 +1,447 @@
+﻿@using MvcPaging
+@model IPagedList<TianPingInformation.Models.POCO.Student>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>
+                姓名
+            </th>
+            <th>
+                身份证号
+            </th>
+            <th>
+                住址
+            </th>
+            <th>
+                报名日期
+            </th>
+            <th>
+                联系方式
+            </th>
+            <th>
+                科目1
+            </th>
+            <th>
+                科目2
+            </th>
+            <th>
+                科目3
+            </th>
+            <th>
+                科目4
+            </th>
+            <th>
+                发照日期
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        { 
+            <tr>
+                <td>@item.Name
+                </td>
+                <td>@item.Identity
+                </td>
+                <td>@item.Address
+                </td>
+                <td>@item.EnrollmentDate.ToShortDateString()
+                </td>
+                <td>@item.Phone
+                </td>
+                <td>@item.Exam1.ToShortDateString()
+                </td>
+                <td>@item.Exam2.ToShortDateString()
+                </td>
+                <td>@item.Exam3.ToShortDateString()
+                </td>
+                <td>@item.Exam4.ToShortDateString()
+                </td>
+                <td>@item.IssueDate.ToShortDateString()
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="edit(@item.Id)">
+                        编辑</button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#showModal" onclick="show(@item.Id)">
+                        详细</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="deleteRow(@item.Id)">
+                        删除</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- 分页插件 -->
+<div class="pager1">
+    @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { First = "首页", Next = "下一页", Previous = "上一页", Page = "", Last = "末页" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "下一页", Previous = "上一页", Page = "第{0}页" },
+                Size = Size.normal,
+                Alignment = Alignment.right,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = ""
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new
+            {
+                controller = "Student",
+                action = "AjaxIndex",
+                student_name = ViewData["student_name"],
+                id_number = ViewData["id_number"],
+                start_date = ViewData["start_date"],
+                end_date = ViewData["end_date"]
+            }))
+</div>
+<!-- new AjaxOption里的几个ViewData参数作用：当用户进行翻页时，将查询条件带过去 -->
+<!-- Create/Edit Modal -->
+<div class="modal fade" style="display:none;" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;</button>
+                <h4 class="modal-title" id="myModalLabel">
+                    学员信息</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <form id="studentForm" class="form-horizontal" role="form" action="/">
+                <div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        姓名</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        身份证号</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="identity">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        住址</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="address">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        报名日期</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="enrollment_date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        联系方式</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="phone">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        科目1</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="exam1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        科目2</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="exam2">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        科目3</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="exam3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        科目4</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="exam4">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        发照日期</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="issue_date">
+                    </div>
+                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭</button>
+                <button type="button" id="modal-form-submit" class="btn btn-primary">
+                    保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- Show Modal -->
+<div class="modal fade" style="display:none;" id="showModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;</button>
+                <h4 class="modal-title" id="myModalLabel2">
+                    学员详细信息</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <form class="form-horizontal" role="form" action="/">
+                <div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        姓名</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="show_name" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        身份证号</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="show_identity" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        住址</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="show_address" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        报名日期</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="show_enrollment_date" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        联系方式</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="show_phone" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        科目1</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="show_exam1" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        科目2</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="show_exam2" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        科目3</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="show_exam3" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        科目4</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="show_exam4" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        发照日期</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datetime" id="show_issue_date" disabled="disabled">
+                    </div>
+                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- Delete Modal -->
+<div class="modal fade" style="display:none;" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;</button>
+                <h4 class="modal-title" id="myModalLabel3">
+                    系统提示</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <p>确定删除此条记录?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" id="delete_confirm" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script type="text/javascript">
+    var id;       // 存储记录Id
+    var url;      // 存储ajax提交的url
+
+    // 新建学员
+    function create() {
+        // 清空form
+        // $('#studentForm').find("input[type=text], textarea, password").val("");
+        $('#name').val("");
+        $('#identity').val("");
+        $('#address').val("");
+        $('#enrollment_date').val("");
+        $('#phone').val("");
+        $('#exam1').val("");
+        $('#exam2').val("");
+        $('#exam3').val("");
+        $('#exam4').val("");
+        $('#issue_date').val("");
+
+        url = 'AjaxCreate';
+    }
+
+    // 填充编辑前的值
+    function edit(Id) {
+        id = Id;
+        url = 'AjaxEdit?id=' + id;
+        $.ajax({
+            type: 'Get',
+            url: url,
+            success: function (student) {
+                $('#name').val(student.Name);
+                $('#identity').val(student.Identity);
+                $('#address').val(student.Address);
+                $('#enrollment_date').val(ChangeDateFormat(student.EnrollmentDate));
+                $('#phone').val(student.Phone);
+                $('#exam1').val(ChangeDateFormat(student.Exam1));
+                $('#exam2').val(ChangeDateFormat(student.Exam2));
+                $('#exam3').val(ChangeDateFormat(student.Exam3));
+                $('#exam4').val(ChangeDateFormat(student.Exam4));
+                $('#issue_date').val(ChangeDateFormat(student.IssueDate));
+            }
+        });
+    }
+
+    // 保存新建/修改后的结果
+    $('#modal-form-submit').on('click', function (e) {
+        $('#studentForm').submit();
+
+        // 获取修改后的值
+        var name = $('#name').val();
+        var identity = $('#identity').val();
+        var address = $('#address').val();
+        var enrollment_date = $('#enrollment_date').val();
+        var phone = $('#phone').val();
+        var exam1 = $('#exam1').val();
+        var exam2 = $('#exam2').val();
+        var exam3 = $('#exam3').val();
+        var exam4 = $('#exam4').val();
+        var issue_date = $('#issue_date').val();
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: "name=" + name + "&identity=" + identity + "&address=" + address + "&enrollment_date=" + enrollment_date + "&phone=" + phone + "&exam1=" + exam1 + "&exam2=" + exam2 + "&exam3=" + exam3 + "&exam4=" + exam4 + "&issue_date=" + issue_date,
+            success: function (student) {
+                $("#editModal").modal("hide");
+                location.reload();
+            }
+        });
+    });
+
+    // 显示学员详细信息
+    function show(Id) {
+        $.ajax({
+            type: 'Post',
+            url: 'AjaxDetails',
+            data: { id: Id },
+            success: function (student) {
+                $('#show_name').val(student.Name);
+                $('#show_identity').val(student.Identity);
+                $('#show_address').val(student.Address);
+                $('#show_enrollment_date').val(ChangeDateFormat(student.EnrollmentDate));
+                $('#show_phone').val(student.Phone);
+                $('#show_exam1').val(ChangeDateFormat(student.Exam1));
+                $('#show_exam2').val(ChangeDateFormat(student.Exam2));
+                $('#show_exam3').val(ChangeDateFormat(student.Exam3));
+                $('#show_exam4').val(ChangeDateFormat(student.Exam4));
+                $('#show_issue_date').val(ChangeDateFormat(student.IssueDate));
+            }
+        });
+    }
+
+    // 删除记录
+    function deleteRow(Id) {
+        url = 'AjaxDelete';
+        id = Id;
+    }
+
+    // 确认删除
+    $('#delete_confirm').on('click', function (e) {
+        $.post(url, { id: id }, function () {
+            location.reload();
+        });
+    });
+
+    // 格式化日期，否则显示时间为时间戳形式:/Date(timestamp)/
+    function ChangeDateFormat(d) {
+        var date = new Date(parseInt(d.replace("/Date(", "").replace(")/", ""), 10));
+        var month = date.getMonth() + 1;
+        var currentDate = date.getDate();
+        return date.getFullYear() + "-" + month + "-" + currentDate;
+    }
+</script>
